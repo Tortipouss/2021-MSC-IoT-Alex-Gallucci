@@ -16,11 +16,7 @@ SigfoxMessage msg;
 void setup() {
   dht.begin();
   Serial.begin(115200);
-  while (Serial);
-
-  if (!SigFox.begin()) {
-    Serial.println("SigFox error, rebooting");
-  }
+  
   delay(100); // Wait at least 30ms after first configuration
 }
 
@@ -40,6 +36,8 @@ void loop() {
   Serial.print(msg.moduleTemperature, HEX); // display what we will send in Hexadecimal
   Serial.print("\nHumidité : ");
   Serial.print(msg.moduleHumidity, HEX); // display what we will send in Decimal
+  Serial.print("\n"); // display what we will send in Decimal
+
 
   // Clears all pending interrupts
   SigFox.status();
@@ -49,9 +47,6 @@ void loop() {
   SigFox.beginPacket();
   SigFox.write((uint8_t*)&msg, sizeof(SigfoxMessage));
 
-  Serial.print("Status: ");
-  Serial.println(SigFox.endPacket());
-
   SigFox.end();
-  delay(10000);
+  delay(60000 * 10);
   }
