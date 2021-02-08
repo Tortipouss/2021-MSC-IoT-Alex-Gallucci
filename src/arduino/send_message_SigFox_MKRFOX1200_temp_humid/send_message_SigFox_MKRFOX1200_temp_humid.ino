@@ -14,9 +14,7 @@ typedef struct __attribute__ ((packed)) sigfox_message {
 SigfoxMessage msg;
 
 void setup() {
-  dht.begin();
-  Serial.begin(115200);
-  
+  dht.begin();  
   delay(100); // Wait at least 30ms after first configuration
 }
 
@@ -30,23 +28,16 @@ void loop() {
   msg.moduleTemperature = t; // température 1/100th of degrees
   msg.moduleHumidity = h; // température 1/100th of degrees
 
-
-
-  Serial.print("Temperature : ");
-  Serial.print(msg.moduleTemperature, HEX); // display what we will send in Hexadecimal
-  Serial.print("\nHumidité : ");
-  Serial.print(msg.moduleHumidity, HEX); // display what we will send in Decimal
-  Serial.print("\n"); // display what we will send in Decimal
-
-
   // Clears all pending interrupts
+  SigFox.begin();
   SigFox.status();
-  delay(1);
+  delay(100);
 
   // Send the data
   SigFox.beginPacket();
   SigFox.write((uint8_t*)&msg, sizeof(SigfoxMessage));
-
+  SigFox.endPacket();
   SigFox.end();
+  
   delay(60000 * 10);
-  }
+}
