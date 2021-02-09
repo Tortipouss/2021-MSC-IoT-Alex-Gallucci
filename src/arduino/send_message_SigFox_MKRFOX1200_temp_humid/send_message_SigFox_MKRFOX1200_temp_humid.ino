@@ -38,6 +38,7 @@ void loop() {
   SigFox.write((uint8_t*)&msg, sizeof(SigfoxMessage));
   SigFox.endPacket();
   SigFox.end();
-  
-  delay(60000 * 10);
+
+  // Recommence toutes les 30 minutes
+  delay(60000 * 30);
 }
