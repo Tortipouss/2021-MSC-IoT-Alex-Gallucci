@@ -9,7 +9,7 @@ function getAll(){
         $dbh = conn_db('0e364_alex');
 
         // modèle de requête
-        $sql = " SELECT * FROM tb_tempAndHumid;";
+        $sql = " SELECT * FROM tb_tempHumid;";
 
         //préparation de la requête sur le serveur
         $stmt = $dbh->prepare($sql);
@@ -34,8 +34,8 @@ $result = getAll();
 $temperature = [];
 $humidite = [];
 foreach ($result as $row){
-       array_push($temperature, $row['temp']);
-       array_push($humidite, $row['humid']);
+       array_push($temperature, $row['temp_tempHumid']);
+       array_push($humidite, $row['humid_tempHumid']);
 }
 ?>
 
