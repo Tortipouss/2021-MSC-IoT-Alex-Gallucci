@@ -39,6 +39,6 @@ void loop() {
   SigFox.endPacket();
   SigFox.end();
 
-  // Recommence toutes les 30 minutes
-  delay(60000 * 30);
+  // Recommence toutes les 60 minutes
+  delay(60000 * 60);
 }
