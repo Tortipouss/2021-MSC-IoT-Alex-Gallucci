@@ -4,7 +4,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 /*
  * Auteur : Alex Gallucci
- * Version : 1.0
+ * Version : 1.1
  *
  * Gère toute la partie de l'API
  * pour ce qui en est de la selection
@@ -35,7 +35,7 @@ $app->get('/api/humidites', function (Request $request, Response $response) {
     }
 
     // retourne un tableau des données au format JSON
-    echo json_encode($stmt->fetchAll());
+    return json_encode($stmt->fetchAll());
 });
 
 /* Retourne les valeurs d'humidités en fonction de l'id du thermometre */
@@ -135,40 +135,6 @@ $app->get('/api/humidites/therm/nom/{therNom}', function (Request $request, Resp
     // Affiche les données trouvées
     echo json_encode($stmt->fetchAll());
 });
-
-/* Retourne les valeurs d'humidités d'un thermomètre en fonction d'une salle*/
-$app->get('/api/humidites/salles/{salle}', function (Request $request, Response $response) {
-
-    $salle = $request->getAttribute('salle');
-
-    // Requête qui sera executé par la suite
-    $sql = "SELECT humid_tempHumid FROM tb_tempHumid, tb_salle WHERE tb_salle.nom_salle LIKE :salle";
-
-
-    try {
-        // Création de l'objet de la BD
-        $dbh = conn_db();
-
-        //préparation de la requête sur le serveur
-        $stmt = $dbh->prepare($sql);
-
-        // Filtrage des entées afin d'éviter des injections
-        $stmt->bindParam(':salle', $salle, PDO::PARAM_STR);
-
-        //exécution de la requête
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute();
-
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-        die();
-    }
-
-
-    // Affiche les données trouvées
-    echo json_encode($stmt->fetchAll());
-});
-
 
 
 /* --------- TEMPERATURE ------------- */
@@ -298,13 +264,14 @@ $app->get('/api/temperatures/therm/pac/{therPAC}', function (Request $request, R
     echo json_encode($stmt->fetchAll());
 });
 
-/* Retourne les valeurs de températures d'un thermometre en fonction d'une salle*/
-$app->get('/api/temperatures/salles/{salle}', function (Request $request, Response $response) {
+/* Salle */
+/* Retourne les valeurs de températures en fonction de l'id du thermometre */
+$app->get('/api/salles/therm/id/{therID}', function (Request $request, Response $response) {
 
-    $salle = $request->getAttribute('salle');
+    $salle = $request->getAttribute('therID');
 
     // Requête qui sera executé par la suite
-    $sql = "SELECT temp_tempHumid FROM tb_tempHumid, tb_salle WHERE tb_salle.nom_salle LIKE :salle";
+    $sql = "SELECT nom_salle FROM tb_salle, tb_thermometre WHERE tb_thermometre.fk_pk_salle = :salle";
 
 
     try {
@@ -330,3 +297,4 @@ $app->get('/api/temperatures/salles/{salle}', function (Request $request, Respon
     // Affiche les données trouvées
     echo json_encode($stmt->fetchAll());
 });
+

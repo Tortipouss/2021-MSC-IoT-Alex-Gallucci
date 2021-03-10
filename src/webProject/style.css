@@ -4,21 +4,27 @@ body{
     min-height: 100vh;
     background: #333;
     display: flex;
-    justify-content: center;
     align-items: center;
     font-family: consolas, sans-serif;
+}
+
+.card:nth-child(3){
+    margin-left: 22em;
 }
 
 .container{
     width: 700px;
     position: relative;
-    display: flex;
+    display: inline;
     justify-content: space-between;
+    margin-left: 30px;
 }
 
 .container .card{
     position: relative;
     cursor: pointer;
+    width: 0;
+    display: inline-block;
 }
 
 .container .card .face{
@@ -106,6 +112,17 @@ body{
 .value{
     color: white;
     font-size: 30px;
+}
+
+.map {
+    background: #646464;
+    width: 50%;
+    display: inline-block;
+    border-radius: 15px;
+}
+
+form {
+    text-align: center;
 }
 
 @media only screen and (max-width: 600px) {

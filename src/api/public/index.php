@@ -14,6 +14,13 @@ require '../src/modele.php';
 // # create new Slim instance
 $app = new \Slim\App;
 
+// # Converti l'en-tête au format JSON
+$app->add(function (Request $request, Response $response, callable $next) {
+    // Use the PSR-7 $response object
+    $response = $response->withHeader('Content-type', 'application/json');
+    return $next($request, $response);
+});
+
 require '../src/routes/get.php';
 require '../src/routes/delete.php';
 require '../src/routes/insert.php';

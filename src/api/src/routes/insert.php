@@ -11,7 +11,7 @@ use Psr\Http\Message\ResponseInterface as Response;
  */
 
 /* Insere un message dans la BD avec la température et l'humidité*/
-$app->post('/api/tempHumid', function (Request $request, Response $response) {
+$app->post('/api/sigFoxMKRFOX1200', function (Request $request, Response $response) {
 
 try {
 
