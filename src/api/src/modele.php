@@ -1,8 +1,12 @@
 <?php
 
+/*
+ * Retourn l'id du message dans la BD en
+ * fournissant le numéro de séquence de celui-ci
+ */
 function getIdMessBySeqNum($seqMess){
 
-    // Requête qui sera executé par la suite
+    // Requête qui sera executée par la suite
     $sql = "SELECT pk_msg FROM tb_message WHERE seqNum_msg LIKE :seqMess";
 
 
