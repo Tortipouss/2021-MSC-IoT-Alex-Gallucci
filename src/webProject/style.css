@@ -139,6 +139,28 @@ form {
     color: #cccccc
 }
 
+#dernMAJ{
+    width: 700px;
+    text-align: center;
+    font-size: 1em;
+    color: #cccccc;
+    display: block;
+}
+
+table, th, tr, td{
+    border: 1px solid;
+    text-align: center;
+    font-size: 1.2em;
+    padding: 4px;
+}
+
+#divHistorique{
+    margin-left: 50px;
+    margin-right: 50px;
+    display: grid;
+    color: white;
+}
+
 /* Responsive pour les écrans smartphones */
 @media only screen and (max-width: 600px) {
     .card {

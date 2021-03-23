@@ -137,6 +137,7 @@ $app->get('/api/humidites/therm/nom/{therNom}', function (Request $request, Resp
 });
 
 
+
 /* --------- TEMPERATURE ------------- */
 /* Retourne TOUTES les valeurs de températures dans la BD */
 $app->get('/api/temperatures', function (Request $request, Response $response) {
@@ -264,7 +265,7 @@ $app->get('/api/temperatures/therm/pac/{therPAC}', function (Request $request, R
     echo json_encode($stmt->fetchAll());
 });
 
-/* Salle */
+/* --------------------- Salle --------------------------- */
 /* Retourne les valeurs de températures en fonction de l'id du thermometre */
 $app->get('/api/salles/therm/id/{therID}', function (Request $request, Response $response) {
 
@@ -298,3 +299,65 @@ $app->get('/api/salles/therm/id/{therID}', function (Request $request, Response 
     echo json_encode($stmt->fetchAll());
 });
 
+/* ------------- Température ET Humidité ------------------ */
+/* Retourne les valeurs de températures, d'humidité ainsi que leur date en fonction de l'id du thermometre */
+$app->get('/api/tempHumid/therm/id/{therID}', function (Request $request, Response $response) {
+
+    $idTherm = $request->getAttribute('therID');
+
+    // Requête qui sera executé par la suite
+    $sql = "SELECT pk_tempHumid, temp_tempHumid, humid_tempHumid, dateRecep_msg FROM tb_tempHumid, tb_thermometre, tb_message WHERE tb_thermometre.pk_therm LIKE :idTherm AND tb_message.pk_msg = tb_tempHumid.fk_pk_mess ORDER BY tb_message.pk_msg DESC";
+
+    try {
+        // Création de l'objet de la BD
+        $dbh = conn_db();
+
+        //préparation de la requête sur le serveur
+        $stmt = $dbh->prepare($sql);
+
+        // Filtrage des entées afin d'éviter des injections
+        $stmt->bindParam(':idTherm', $idTherm, PDO::PARAM_STR);
+
+        //exécution de la requête
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+        die();
+    }
+
+    // Affiche les données trouvées
+    echo json_encode($stmt->fetchAll());
+});
+
+/* Retourne les données de aujourd'hui */
+$app->get('/api/today/tempHumid/therm/id/{therID}', function (Request $request, Response $response) {
+
+    $idTherm = $request->getAttribute('therID');
+
+    // Requête qui sera executé par la suite
+    $sql = "SELECT temp_tempHumid, humid_tempHumid, dateRecep_msg FROM tb_tempHumid, tb_thermometre, tb_message WHERE tb_thermometre.pk_therm LIKE :idTherm AND tb_message.pk_msg = tb_tempHumid.fk_pk_mess AND dateRecep_msg = DATE_FORMAT(CURRENT_TIMESTAMP, '%Y%m%d');";
+
+    try {
+        // Création de l'objet de la BD
+        $dbh = conn_db();
+
+        //préparation de la requête sur le serveur
+        $stmt = $dbh->prepare($sql);
+
+        // Filtrage des entées afin d'éviter des injections
+        $stmt->bindParam(':idTherm', $idTherm, PDO::PARAM_STR);
+
+        //exécution de la requête
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+        die();
+    }
+
+    // Affiche les données trouvées
+    echo json_encode($stmt->fetchAll());
+});

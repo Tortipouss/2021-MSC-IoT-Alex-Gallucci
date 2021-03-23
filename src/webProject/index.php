@@ -1,23 +1,5 @@
 <?php
-
-/*
- * Extrait des données spécifiques d'un fichier JSON
- * param $url L'URI de l'api
- * param $argument, le nom du groupe de la donnée à éxtraire
- * return les données désirées sous forme d'un arrayList
- */
-function getData($uri, $argument)
-{
-    $arr_final = [];
-
-    $file = file_get_contents($uri);
-    $decoded = json_decode($file, true);
-    foreach ($decoded as $line){
-        array_push($arr_final, $line[$argument]);
-    }
-    return $arr_final;
-}
-
+require 'fonctions.php';
 // Données par defaut
 $temperature = ['noData', 'noData', 'noData','noData','noData','noData'];
 $humidite = ['noData','noData','noData','noData','noData','noData'];
@@ -43,39 +25,55 @@ if (!isset($_GET['salle'])) {
     switch ($_GET['salle']){
         CASE 'b1-01':
             $user = 'Thomas';
+            $salle = ['B1-01'];
             break;
         CASE 'b1-02':
             $user = 'Nils';
+            $salle = ['B1-02'];
             break;
         CASE 'b1-04':
-            $temperature = getData('https://gallale.divtec.me/api/temperatures/therm/id/1D3537', 'temp_tempHumid');
-            $humidite = getData('https://gallale.divtec.me/api/humidites/therm/id/1D3537', 'humid_tempHumid');
-            $salle = getData('https://gallale.divtec.me/api/salles/therm/id/1D3537', 'nom_salle');
+            $tempHumid = getData('https://gallale.divtec.me/api/today/tempHumid/therm/id/1D3537');
+            $todayTemp = getData('https://gallale.divtec.me/api/today/tempHumid/therm/id/1D3537');
+
+            foreach ($tempHumid as $tempH){
+                array_push($temperature, $tempH['temp_tempHumid']);
+                array_push($humidite, $tempH['humid_tempHumid']);
+            }
+
+            $salle = getDataArg('https://gallale.divtec.me/api/salles/therm/id/1D3537', 'nom_salle');
             $user = 'Alex';
             break;
         CASE 'b1-05':
             $user = 'Teva';
+            $salle = ['B1-05'];
             break;
         CASE 'b1-08':
             $user = 'Théo';
+            $salle = ['B1-08'];
             break;
         CASE 'b1-13':
             $user = 'Anthony';
+            $salle = ['B1-13'];
             break;
         CASE 'b1-15':
             $user = 'Matteo';
+            $salle = ['B1-15'];
             break;
         CASE 'b1-21':
             $user = 'Simret';
+            $salle = ['B1-21'];
             break;
         CASE 'couloir':
             $user = 'Rayan';
+            $salle = ['couloir'];
             break;
         CASE 'bocal':
             $user = 'Steven';
+            $salle = ['bocal'];
             break;
         CASE 'bureauJuillerat':
             $user = 'Louis';
+            $salle = ['bureau de M. Juillerat'];
             break;
     }
 
@@ -105,6 +103,7 @@ Site web créé à l'occasion de l'atelier Internet Of Things
 <body>
 
 <!-- Exposition des données du thermomètre séléctionné -->
+<h3 id="dernMAJ">Dernière mise à jour : <?php echo date('d-m-y'); ?></h3>
 <div class="container">
     <h2 id="mainTitle"><?php echo $mainTitle?></h2>
     <div class="card">
@@ -122,16 +121,22 @@ Site web créé à l'occasion de l'atelier Internet Of Things
             </div>
         </div>
         <div class="face face2">
-            <div class="content">
-                <p><strong>Historique</strong></p>
-                <br>
+            <?php
+            if(isset($tempHumid)){
+                echo '<div class="content">
+                <p><strong>Aujourd\'hui :</strong></p>
+                <p>Temp. min : ' . getTodayData($tempHumid)[0] . '</p>
+                <p>Temp. max : ' . getTodayData($tempHumid)[1] . '</p>
+                <a href="historique.php">Voir l\'historique</a>
+            </div>';
+            }else {
+                echo '<div class="content">
+                <p><strong>Impossible d\'afficher les données spécifique de la journée</strong></p>
+                <p>Seul le thermomètre situé en salle B1-04 le peut.</p>
+            </div>';
+            }
+            ?>
 
-                <!-- Affiche un petit historique des 6 dernières températures -->
-                <?php for ($i = sizeof($temperature) - 2; $i > sizeof($temperature) - 6 ; $i--) {
-                    echo '<p>' . $temperature[$i] . ' °C' . '</p>';
-                } ?>
-                <a href="#">Voir + / modifier</a>
-            </div>
         </div>
     </div>
     <div class="card">
@@ -147,16 +152,21 @@ Site web créé à l'occasion de l'atelier Internet Of Things
             </div>
         </div>
         <div class="face face2">
-            <div class="content">
-                <p><strong>Historique</strong></p>
-                <br>
-
-                <!-- Affiche un petit historique des 6 dernières températures -->
-                <?php for ($i = sizeof($humidite) - 2; $i > sizeof($humidite) - 6; $i--) {
-                    echo '<p>' . $humidite[$i] . ' %' . '</p>';
-                } ?>
-                <a href="#">Voir + / modifier</a>
-            </div>
+            <?php
+            if(isset($tempHumid)){
+                echo '<div class="content">
+                <p><strong>Aujourd\'hui :</strong></p>
+                <p>Humid. min : ' . getTodayData($tempHumid)[2] . '</p>
+                <p>Humid. max : ' . getTodayData($tempHumid)[3] . '</p>
+                <a href="historique.php">Voir l\'historique</a>
+            </div>';
+            }else{
+                echo '<div class="content">
+                <p><strong>Impossible d\'afficher les données spécifique de la journée</strong></p>
+                <p>Seul le thermomètre situé en salle B1-04 le peut.</p>
+            </div>';
+            }
+            ?>
         </div>
     </div>
 </div>
@@ -199,7 +209,7 @@ Site web créé à l'occasion de l'atelier Internet Of Things
               href="?salle=couloir" alt="couloir" />
 
         <area shape="rect" coords="620, 85, 685, 177"
-              href="" alt="B112" />
+              alt="B112" style="cursor: not-allowed"/>
 
         <area shape="rect" coords="685, 85, 770, 177"
               href="?salle=b1-13" alt="B113" />

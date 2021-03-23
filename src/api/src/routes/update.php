@@ -11,7 +11,8 @@ use Psr\Http\Message\ResponseInterface as Response;
  * des données sur la BD.
  */
 
-$app->put('/api/therm/humid/{id}', function (Request $request, Response $response){
+/* Met à jout la température et l'humidité */
+$app->put('/api/therm/humidTemp/{id}', function (Request $request, Response $response){
 
     $id = $request->getAttribute('id');
 
@@ -24,12 +25,25 @@ $app->put('/api/therm/humid/{id}', function (Request $request, Response $respons
 
         $data = [];
 
+        // Req pour insertion des données
+        if(isset($post['temp']) || isset($post['humid'])){
+
+            if(isset($post['temp']) && isset($post['humid'])){
+                $sql = "UPDATE tb_tempHumid SET temp_tempHumid = :temp, humid_tempHumid = :humid WHERE $id = pk_tempHumid";
+            }
+
+            else if(isset($post['temp'])){
+                $sql = "UPDATE tb_tempHumid SET temp_tempHumid = :temp WHERE $id = pk_tempHumid";
+            }
+
+            else if(isset($post['humid'])){
+                $sql = "UPDATE tb_tempHumid SET humid_tempHumid = :humid WHERE $id = pk_tempHumid";
+            }
+        }
+
         // Conversion en date
         $data['temp'] = $post['temp'];
         $data['humid'] = $post['humid'];
-
-        // Req pour insertion des données
-        $sql = "UPDATE tb_tempHumid SET temp_tempHumid = :temp, humid_tempHumid = :humid WHERE $id = pk_tempHumid";
 
         //préparation de la requête sur le serveur
         $stmt = $dbh->prepare($sql);
