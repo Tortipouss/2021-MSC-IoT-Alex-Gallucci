@@ -1,0 +1,548 @@
+{
+	"info": {
+		"_postman_id": "6e4f96da-2323-4cc9-b2fa-5f8bb3ff9315",
+		"name": "API IOT tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Humidités",
+			"item": [
+				{
+					"name": "Humidités",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Code 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"L'humidité n'est pas vide\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include(\"null\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"l'ID à été trouvé\", function () {\r",
+									"    pm.expect(pm.response.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://gallale.divtec.me/api/humidites",
+							"protocol": "https",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"humidites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Humidités par l'ID du thermomètre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Code 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://gallale.divtec.me/api/humidites/therm/id/1D3537",
+							"protocol": "https",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"humidites",
+								"therm",
+								"id",
+								"1D3537"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Humidités par le PAC du thermomètre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Code 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://gallale.divtec.me/api/humidites/therm/pac/D131ED21F84C5A4D",
+							"protocol": "https",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"humidites",
+								"therm",
+								"pac",
+								"D131ED21F84C5A4D"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Humidités par le nom du thermomètre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Code 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://gallale.divtec.me/api/humidites/therm/nom/GALLALE_DHT11",
+							"protocol": "http",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"humidites",
+								"therm",
+								"nom",
+								"GALLALE_DHT11"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Températures",
+			"item": [
+				{
+					"name": "Températures",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Code 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La température n'est pas vide\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include(\"null\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://gallale.divtec.me/api/temperatures",
+							"protocol": "http",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"temperatures"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Températures par l'ID du thermomètre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Code 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://gallale.divtec.me/api/temperatures/therm/id/1D3537",
+							"protocol": "http",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"temperatures",
+								"therm",
+								"id",
+								"1D3537"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Températures par le PAC du thermomètre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Code 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://gallale.divtec.me/api/temperatures/therm/pac/D131ED21F84C5A4D",
+							"protocol": "http",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"temperatures",
+								"therm",
+								"pac",
+								"D131ED21F84C5A4D"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Température par le nom du thermomètre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Code 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://gallale.divtec.me/api/temperatures/therm/nom/GALLALE_DHT11",
+							"protocol": "http",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"temperatures",
+								"therm",
+								"nom",
+								"GALLALE_DHT11"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Thermometre",
+			"item": [
+				{
+					"name": "Entrée de température et d'humidité",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://gallale.divtec.me/api/humidTemp/30",
+							"protocol": "https",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"humidTemp",
+								"30"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Humid et temp par l'ID du message",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "temp",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "humid",
+									"value": "9",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://gallale.divtec.me/api/therm/humid/27",
+							"protocol": "https",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"therm",
+								"humid",
+								"27"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Salle par ID du thermometre",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://gallale.divtec.me/api/salles/therm/id/1D3537",
+							"protocol": "https",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"salles",
+								"therm",
+								"id",
+								"1D3537"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Humidité ET Température",
+			"item": [
+				{
+					"name": "Humid, Temp, Date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://gallale.divtec.me/api/tempHumid/therm/id/1D3537",
+							"protocol": "https",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"tempHumid",
+								"therm",
+								"id",
+								"1D3537"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Humid, Temp, Date TODAY",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://gallale.divtec.me/api/today/tempHumid/therm/id/1D3537",
+							"protocol": "https",
+							"host": [
+								"gallale",
+								"divtec",
+								"me"
+							],
+							"path": [
+								"api",
+								"today",
+								"tempHumid",
+								"therm",
+								"id",
+								"1D3537"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SigFox",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Code 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "dateMsg",
+							"value": "1515988468"
+						},
+						{
+							"key": "seqNum",
+							"value": "2593"
+						},
+						{
+							"key": "temp",
+							"value": "41"
+						},
+						{
+							"key": "humid",
+							"value": "18"
+						},
+						{
+							"key": "therm",
+							"value": "1D3537"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://gallale.divtec.me/api/sigFoxMKRFOX1200",
+					"protocol": "http",
+					"host": [
+						"gallale",
+						"divtec",
+						"me"
+					],
+					"path": [
+						"api",
+						"sigFoxMKRFOX1200"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
