@@ -1,4 +1,11 @@
 <?php
+/*
+Auteur : Alex Gallucci
+Dernière modification : 23.03.2021
+
+Regroupe les fonctions utilisées par les autres pages
+php du site web
+*/
 
 /*
  * Extrait des données spécifiques d'un fichier JSON
@@ -18,6 +25,11 @@ function getDataArg($uri, $argument)
     return $arr_final;
 }
 
+/*
+ * Extrait des données d'un fichier JSON
+ * param $uri L'URI de l'api
+ * return les données désirées sous forme d'un arrayList
+ */
 function getData($uri){
     $arr_final = [];
 
@@ -29,27 +41,34 @@ function getData($uri){
     return $arr_final;
 }
 
-function getTodayData($tempHumid){
+/*
+ * Retourne les données max et min de températures et d'humidité de la journée
+ * param $temp l'array list qui contient les données de températures de la journée
+ * param $humid l'array list qui contient les données d'humidités de la journée
+ */
+function getTodayData($temp, $humid){
     $minTemp = 100;
     $maxTemp = 0;
     $minHumid = 100;
     $maxHumid = 0;
 
-    foreach ($tempHumid as $tempH){
-        if($minTemp >= $tempH['temp_tempHumid']){
-            $minTemp = $tempH['temp_tempHumid'];
+    foreach ($temp as $tempH){
+        if($minTemp >= $tempH){
+            $minTemp = $tempH;
         }
 
-        if($maxTemp <= $tempH['temp_tempHumid']){
-            $maxTemp = $tempH['temp_tempHumid'];
+        if($maxTemp <= $tempH){
+            $maxTemp = $tempH;
+        }
+    }
+
+    foreach ($humid as $humidH) {
+        if($minHumid >= $humidH){
+            $minHumid = $humidH;
         }
 
-        if($minHumid >= $tempH['humid_tempHumid']){
-            $minHumid = $tempH['humid_tempHumid'];
-        }
-
-        if($maxHumid <= $tempH['humid_tempHumid']){
-            $maxHumid = $tempH['humid_tempHumid'];
+        if($maxHumid <= $humidH){
+            $maxHumid = $humidH;
         }
     }
 
@@ -57,21 +76,27 @@ function getTodayData($tempHumid){
 
 }
 
+/*
+ * Converti une date du format YYYYMMJJ au format JJ-MM-YYYY
+ * param $date la date qui doit être convertie
+ * return la date convertie
+ */
 function convertHardDateToSoft($date){
     return  substr($date, 6, 2) . '.' . substr($date, 4, 2) . '.' . substr($date, 0, 4);
 }
 
-function curl_del($path)
+/*
+ * Effectue une requête DELETE sur l'API donnée
+ * param $api l'API sur laquelle la requete sera envoyée
+ * return la réponse de la requête
+ */
+function curl_del($api)
 {
-
-    // URL de l'API
-    $url = $path;
-
     // Initialise l'objet de la requête
     $curl_handle = curl_init();
 
     // Le configure avec l'url
-    curl_setopt($curl_handle, CURLOPT_URL, $url);
+    curl_setopt($curl_handle, CURLOPT_URL, $api);
 
     // Configure le header de la requête
     curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -89,7 +114,14 @@ function curl_del($path)
     return $response;
 }
 
-function curl_upd($path, $temp, $humid){
+/*
+ * Effectue une requête PUT sur l'api donnée
+ * param $api l'API sur laquelle la requête sera efféctuée
+ * param $temp la température sur laquelle effectuer la requête
+ * param $humid l'humidité sur laquelle effectuer la requête
+ * return la réponse de la requête
+ */
+function curl_upd($api, $temp, $humid){
 
     if(isset($temp) && isset($humid)){
         $data = array("temp" => $temp, "humid" => $humid);
@@ -98,7 +130,7 @@ function curl_upd($path, $temp, $humid){
     } else if(isset($humid)){
         $data = array("humid" => $humid);
     }
-    $ch = curl_init($path);
+    $ch = curl_init($api);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));

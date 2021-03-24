@@ -1,3 +1,11 @@
+/*
+Auteur : Alex Gallucci
+Dernière modification : 23.03.2021
+
+Site web créé à l'occasion de l'atelier Internet Of Things
+3ème année du CFC d'informaticien, EMT Porrentruy.
+*/
+
 body{
     padding: 0;
     min-height: 100vh;
@@ -9,6 +17,7 @@ body{
     margin-right: auto;
 }
 
+/* -------- CARTES TEMPERATURES ET D'HUMIDITE ----------- */
 .card:nth-child(3){
     margin-left: 22em;
 }
@@ -108,6 +117,7 @@ body{
     color: #fff;
 }
 
+/* ------- PLAN DES SALLES -------- */
 .imgValue{
     display: flex;
 }
@@ -132,6 +142,7 @@ form {
     text-align: center;
 }
 
+/*-------- HISTORIQUE -----------*/
 #mainTitle{
     width: 700px;
     text-align: center;
@@ -160,6 +171,8 @@ table, th, tr, td{
     display: grid;
     color: white;
 }
+
+
 
 /* Responsive pour les écrans smartphones */
 @media only screen and (max-width: 600px) {

@@ -5,7 +5,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 /*
  * Auteur : Alex Gallucci
- * Version : 1.0
+ * Version : 1.2
  *
  * Gère toute la partie de l'API
  * pour ce qui en est de l'insertion dans la BD.

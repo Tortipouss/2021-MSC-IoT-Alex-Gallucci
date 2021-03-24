@@ -11,10 +11,20 @@ if(isset($_GET['del'])){
 $tempHumid = getData('https://gallale.divtec.me/api/tempHumid/therm/id/1D3537');
 ?>
 
+<!--
+Auteur : Alex Gallucci
+Dernière modification : 23.03.2021
+
+Liste l'historique des données d'un thermomètre
+
+Site web créé à l'occasion de l'atelier Internet Of Things
+3ème année du CFC d'informaticien, EMT Porrentruy.
+-->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <title>Historique</title>
+    <meta name="author" content="Alex Gallucci">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">

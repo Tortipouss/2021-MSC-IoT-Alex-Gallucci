@@ -5,6 +5,8 @@ $temperature = ['noData', 'noData', 'noData','noData','noData','noData'];
 $humidite = ['noData','noData','noData','noData','noData','noData'];
 $salle = ['salle non enregistrée'];
 $user = 'Inconnu';
+$pasDonneAuj = true;
+//var_dump(getData('http://membmat.divtec.me/iot/api/values'));
 
 // Si aucune salle n'est déjà selectionnée
 if (!isset($_GET['salle'])) {
@@ -24,6 +26,15 @@ if (!isset($_GET['salle'])) {
 } else { // Affiche les données des autres thermomètres selon la salle
     switch ($_GET['salle']){
         CASE 'b1-01':
+            $tempHumid = getData('https://amsttho.divtec.me/iot/api/locations/B1-01/values/latest');
+
+            $temperature = [];
+            $humidite = [];
+
+            foreach ($tempHumid as $tempH){
+                array_push($temperature, $tempH['res_temperature']);
+                array_push($humidite, $tempH['res_humidity']);
+            }
             $user = 'Thomas';
             $salle = ['B1-01'];
             break;
@@ -32,8 +43,11 @@ if (!isset($_GET['salle'])) {
             $salle = ['B1-02'];
             break;
         CASE 'b1-04':
+            $pasDonneAuj = false;
             $tempHumid = getData('https://gallale.divtec.me/api/today/tempHumid/therm/id/1D3537');
-            $todayTemp = getData('https://gallale.divtec.me/api/today/tempHumid/therm/id/1D3537');
+
+            $temperature = [];
+            $humidite = [];
 
             foreach ($tempHumid as $tempH){
                 array_push($temperature, $tempH['temp_tempHumid']);
@@ -48,16 +62,50 @@ if (!isset($_GET['salle'])) {
             $salle = ['B1-05'];
             break;
         CASE 'b1-08':
+
+            // RETOURNE TOUTES LES DONNEES
+            $tempHumid = getData('http://chapthe.divtec.me/api/now/mesures/1');
+
+            $temperature = [];
+            $humidite = [];
+
+            foreach ($tempHumid as $tempH){
+                array_push($temperature, $tempH['temp_msre']);
+                array_push($humidite, $tempH['humi_msre']);
+            }
+
             $user = 'Théo';
             $salle = ['B1-08'];
             break;
         CASE 'b1-13':
+            $tempHumid = getData('https://spinant.divtec.me/iot/api/message/appareil/18E103');
+
+            $temperature = [];
+            $humidite = [];
+
+            foreach ($tempHumid as $tempH){
+                array_push($temperature, $tempH['MES_TEMPERATURE']);
+                array_push($humidite, $tempH['MES_HUMIDITE']);
+            }
+
             $user = 'Anthony';
             $salle = ['B1-13'];
             break;
         CASE 'b1-15':
+            // RETOURNE TOUTES LES DONNEES
+            $tempHumid = getData('http://membmat.divtec.me/iot/api/values');
+
+            $temperature = [];
+            $humidite = [];
+
+            foreach ($tempHumid as $tempH){
+                array_push($temperature, $tempH['temperature_message']);
+                array_push($humidite, $tempH['humidite_message']);
+            }
+
             $user = 'Matteo';
             $salle = ['B1-15'];
+
             break;
         CASE 'b1-21':
             $user = 'Simret';
@@ -72,6 +120,17 @@ if (!isset($_GET['salle'])) {
             $salle = ['bocal'];
             break;
         CASE 'bureauJuillerat':
+
+            $tempHumid = getData('https://bovalou.divtec.me/capteur/api/sensors/last');
+
+            $temperature = [];
+            $humidite = [];
+
+            foreach ($tempHumid as $tempH){
+                array_push($temperature, $tempH['temp_res']);
+                array_push($humidite, $tempH['humi_res']);
+            }
+
             $user = 'Louis';
             $salle = ['bureau de M. Juillerat'];
             break;
@@ -86,7 +145,7 @@ $mainTitle = 'Thermomètre de ' . $user . ' en ' . $salle[0];
 
 <!--
 Auteur : Alex Gallucci
-Dernière modification : 16.03.2021
+Dernière modification : 23.03.2021
 
 Site web créé à l'occasion de l'atelier Internet Of Things
 3ème année du CFC d'informaticien, EMT Porrentruy.
@@ -95,6 +154,7 @@ Site web créé à l'occasion de l'atelier Internet Of Things
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="author" content="Alex Gallucci">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Thermomètre IOT</title>
@@ -122,11 +182,11 @@ Site web créé à l'occasion de l'atelier Internet Of Things
         </div>
         <div class="face face2">
             <?php
-            if(isset($tempHumid)){
+            if(!$pasDonneAuj){
                 echo '<div class="content">
                 <p><strong>Aujourd\'hui :</strong></p>
-                <p>Temp. min : ' . getTodayData($tempHumid)[0] . '</p>
-                <p>Temp. max : ' . getTodayData($tempHumid)[1] . '</p>
+                <p>Temp. min : ' . getTodayData($temperature, $humidite)[0] . '</p>
+                <p>Temp. max : ' . getTodayData($temperature, $humidite)[1] . '</p>
                 <a href="historique.php">Voir l\'historique</a>
             </div>';
             }else {
@@ -153,11 +213,11 @@ Site web créé à l'occasion de l'atelier Internet Of Things
         </div>
         <div class="face face2">
             <?php
-            if(isset($tempHumid)){
+            if(!$pasDonneAuj){
                 echo '<div class="content">
                 <p><strong>Aujourd\'hui :</strong></p>
-                <p>Humid. min : ' . getTodayData($tempHumid)[2] . '</p>
-                <p>Humid. max : ' . getTodayData($tempHumid)[3] . '</p>
+                <p>Humid. min : ' . getTodayData($temperature, $humidite)[2] . '</p>
+                <p>Humid. max : ' . getTodayData($temperature, $humidite)[3] . '</p>
                 <a href="historique.php">Voir l\'historique</a>
             </div>';
             }else{
@@ -191,22 +251,22 @@ Site web créé à l'occasion de l'atelier Internet Of Things
               href="?salle=b1-01" alt="B101" />
 
         <area shape="rect" coords="107, 85, 194, 173"
-              href="?salle=b1-02" alt="B102" />
+                <?php /* href="?salle=b1-02" */ ?> alt="B102" style="cursor: not-allowed"/>
 
         <area shape="rect" coords="240, 85, 320, 173"
               href="?salle=b1-04" alt="B104" />
 
         <area shape="rect" coords="192, 133, 238, 173"
-              href="?salle=bocal" alt="bocal" />
+                <?php /* href="?salle=bocal" */?> alt="bocal" style="cursor: not-allowed" />
 
         <area shape="rect" coords="320, 85, 445, 173"
-              href="?salle=b1-05" alt="B105" />
+                <?php /* href="?salle=b1-05" */ ?> alt="B105" style="cursor: not-allowed"/>
 
         <area shape="rect" coords="448, 85, 535, 173"
               href="?salle=b1-08" alt="B108" />
 
         <area shape="rect" coords="107, 48, 535, 85"
-              href="?salle=couloir" alt="couloir" />
+                <?php /* href="?salle=couloir" */ ?> alt="couloir" style="cursor: not-allowed" />
 
         <area shape="rect" coords="620, 85, 685, 177"
               alt="B112" style="cursor: not-allowed"/>
@@ -218,7 +278,7 @@ Site web créé à l'occasion de l'atelier Internet Of Things
               href="?salle=b1-15" alt="B115" />
 
         <area shape="rect" coords="790, 0, 833, 50"
-              href="?salle=b1-21" alt="B121" />
+                <?php /* href="?salle=b1-21" */ ?> alt="B121" style="cursor: not-allowed" />
 
         <area shape="rect" coords="488, 303, 615, 230"
               href="?salle=bureauJuillerat" alt="Bureau de M. Juillerat" />
@@ -230,15 +290,15 @@ Site web créé à l'occasion de l'atelier Internet Of Things
         <label for="salle">Séléction listée:</label>
         <select name="salle" id="salle">
             <option value="b1-01">Salle B1-01</option>
-            <option value="b1-02">Salle B1-02</option>
+            <option disabled="disabled" value="b1-02">Salle B1-02</option>
             <option value="b1-04" selected="selected">Salle B1-04</option>
-            <option value="b1-05">Salle B1-05</option>
+            <option disabled="disabled" value="b1-05">Salle B1-05</option>
             <option value="b1-08">Salle B1-08</option>
             <option value="b1-13">Salle B1-13</option>
             <option value="b1-15">Salle B1-15</option>
-            <option value="b1-15">Salle B1-21</option>
-            <option value="couloir">Couloir</option>
-            <option value="bocal">Salle bocal</option>
+            <option disabled="disabled" value="b1-15">Salle B1-21</option>
+            <option disabled="disabled" value="couloir">Couloir</option>
+            <option disabled="disabled" value="bocal">Salle bocal</option>
             <option value="bureauJuillerat">Bureau de M. Juillerat</option>
         </select>
         <input type="submit" value="OK">

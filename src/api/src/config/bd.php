@@ -1,4 +1,7 @@
 <?php
+/*
+ * Se connecte à la base de donnée
+*/
 function conn_db()
 {
     $user = '0e364_alex';
